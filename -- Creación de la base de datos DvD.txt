@@ -1,0 +1,742 @@
+--DvD Creación de la base de datos
+CREATE DATABASE laboratorioSQL;
+USE laboratorioSQL;
+
+-- Creación de la tabla Profesor
+CREATE TABLE Profesor (
+    doc_prof VARCHAR(11) PRIMARY KEY,
+    nom_prof VARCHAR(30),
+    ape_prof VARCHAR(30),
+    cafe_prof INT,
+    sal_prof INT
+);
+
+
+-- Creación de la tabla Curso
+CREATE TABLE Curso (
+    cod_curs INT IDENTITY PRIMARY KEY,
+    nom_curs VARCHAR(100),
+    horas_cur INT,
+    valor_cur INT
+);
+
+-- Creación de la tabla Estudiante
+CREATE TABLE Estudiante (
+    doc_est VARCHAR(11) PRIMARY KEY,
+    nom_est VARCHAR(30),
+    ape_est VARCHAR(30),
+    edad_est INT
+);
+
+-- Creación de la tabla EstudiantexCurso
+CREATE TABLE EstudiantexCurso (
+    cod_cur_estcur INT,
+    doc_est_estcur VARCHAR(11),
+    fec_ini_estcur DATE,
+    FOREIGN KEY (cod_cur_estcur) REFERENCES Curso (cod_curs),
+    FOREIGN KEY (doc_est_estcur) REFERENCES Estudiante (doc_est)
+);
+
+-- Creación de la tabla Cliente
+CREATE TABLE Cliente (
+    id_cli VARCHAR(11) PRIMARY KEY,
+    nom_cli VARCHAR(30),
+    ape_cli VARCHAR(30),
+    dir_cli VARCHAR(100),
+    dep_cli VARCHAR(20),
+    mes_cum_cli VARCHAR(10)
+);
+
+-- Creación de la tabla Articulo
+CREATE TABLE Articulo (
+    id_art INT IDENTITY PRIMARY KEY,
+    tit_art VARCHAR(100),
+    aut_art VARCHAR(100),
+    edi_art VARCHAR(300),
+    prec_art INT
+);
+
+-- Creación de la tabla Pedido
+CREATE TABLE Pedido (
+    id_ped INT IDENTITY PRIMARY KEY,
+    id_cli_ped VARCHAR(11),
+    fec_ped DATE,
+    val_ped INT,
+    FOREIGN KEY (id_cli_ped) REFERENCES Cliente (id_cli)
+);
+
+-- Creación de la tabla Articuloxpedido
+CREATE TABLE Articuloxpedido (
+    id_ped_artped INT,
+    id_art_artped INT,
+    can_art_artped INT,
+    val_ven_art_artped INT,
+    FOREIGN KEY (id_ped_artped) REFERENCES Pedido (id_ped),
+    FOREIGN KEY (id_art_artped) REFERENCES Articulo (id_art)
+);
+
+-- Creación de la tabla Compañia
+CREATE TABLE Compañia (
+    comnit VARCHAR(11) PRIMARY KEY,
+    comnombre VARCHAR(30),
+    comañofun INT,
+    comreplegal VARCHAR(100)
+);
+
+-- Creación de la tabla TiposAutomotores
+CREATE TABLE TiposAutomotores (
+    auttipo INT PRIMARY KEY
+);
+
+-- Creación de la tabla Automotores
+CREATE TABLE Automotores (
+    autoplaca VARCHAR(6) PRIMARY KEY,
+    automarca VARCHAR(30),
+    autotipo INT,
+    automodelo INT,
+    autopasajeros INT,
+    autocilindraje INT,
+    autonumchasis VARCHAR(20)
+);
+
+-- Creación de la tabla Aseguramientos
+CREATE TABLE Aseguramientos (
+    asecodigo INT IDENTITY PRIMARY KEY,
+    asefechainicio DATE,
+    asefechaexpiracion DATE,
+    asevalorasegurado INT,
+    aseestado VARCHAR(20),
+    asecosto INT,
+    aseplaca VARCHAR(6),
+    FOREIGN KEY (aseplaca) REFERENCES Automotores (autoplaca)
+);
+
+-- Creación de la tabla Incidentes
+CREATE TABLE Incidentes (
+    incicodigo INT IDENTITY PRIMARY KEY,
+    incifecha DATE,
+    inciplaca VARCHAR(6),
+    incilugar VARCHAR(40),
+    inciantheridos INT,
+    incicanfatalidades INT,
+    incicanautosinvolucrados INT,
+    FOREIGN KEY (inciplaca) REFERENCES Automotores (autoplaca)
+);
+
+
+-- Inserciones en la tabla Profesor
+INSERT INTO Profesor (doc_prof, nom_prof, ape_prof, cafe_prof, sal_prof)
+VALUES 
+    ('63.502.720', 'Martha', 'Rojas', 2, 690000),
+    ('91.216.904', 'Carlos', 'Perez', 3, 950000),
+    ('13.826.789', 'Maritza', 'Angarita', 1, 550000),
+    ('1.098.765', 'Alejandra', 'Torres', 4, 1100000);
+
+-- Inserciones en la tabla Curso
+INSERT INTO Curso (nom_curs, horas_cur, valor_cur)
+VALUES 
+    ('Fundamentos de bases de datos', 40, 500000),
+    ('Fundamentos de SQL', 20, 700000),
+    ('Manejo de Mysql', 45, 550000),
+    ('Fundamentals of Oracle', 60, 3000000);
+
+-- Inserciones en la tabla Estudiante
+INSERT INTO Estudiante (doc_est, nom_est, ape_est, edad_est)
+VALUES 
+    ('63.502.720', 'Maria', 'Perez', 22),
+    ('91.245.678', 'Carlos Jose', 'Lopez', 23),
+    ('1.098.098.7', 'Jonatan', 'Ardila', 21),
+    ('1.098.765.6', 'Carlos', 'Martinez', 24);
+
+-- Inserciones en la tabla EstudiantexCurso (corregido el formato de la fecha)
+INSERT INTO EstudiantexCurso (cod_cur_estcur, doc_est_estcur, fec_ini_estcur)
+VALUES 
+    (1, '63.502.720', '2023-10-09'),
+    (2, '1.098.765.6', '2023-10-09'),
+    (3, '1.098.098.7', '2023-10-09'),
+    (4, '63.502.720', '2023-10-09');
+
+-- Inserciones en la tabla Cliente
+INSERT INTO Cliente (id_cli, nom_cli, ape_cli, dir_cli, dep_cli, mes_cum_cli)
+VALUES 
+    ('63502718', 'Maritza', 'Rojas', 'Calle 34 No 14-45', 'Santander', 'Abril'),
+    ('13890234', 'Roger', 'Ariza', 'Cra 30 No 13-45', 'Antioquia', 'Junio'),
+    ('77191956', 'Juan Carlos', 'Arenas', 'Diagonal 26 No 12-34 apto 101', 'Valle', 'Marzo'),
+    ('1098765789', 'Catalina', 'Zapata', 'Av. El libertador No 30-14', 'Cauca', 'Marzo');
+
+-- Inserciones en la tabla Articulo
+INSERT INTO Articulo (tit_art, aut_art, edi_art, prec_art)
+VALUES 
+    ('Redes cisco', 'Ernesto Arigasello', 'Alfaomega - Rama', 60000),
+    ('Facebook y Twitter para adultos', 'Veloso Claudio', 'Alfaomega', 52000),
+    ('Creacion de un portal con php y mysql', 'Jacob Pavon Puertas', 'Alfaomega - Rama', 40000),
+    ('Administracion de sistemas operativos', 'Julio Gomez Lopez', 'Alfaomega - Rama', 55000);
+
+-- Inserciones en la tabla Pedido (corregido el formato de la fecha)
+INSERT INTO Pedido (id_cli_ped, fec_ped, val_ped)
+VALUES 
+    ('13890234', '2012-02-25', 120000),
+    ('77191956', '2012-04-30', 55000),
+    ('63502718', '2011-12-10', 260000),
+    ('1098765789', '2012-02-25', 1800000);
+
+-- Inserciones en la tabla Articuloxpedido
+INSERT INTO Articuloxpedido (id_ped_artped, id_art_artped, can_art_artped, val_ven_art_artped)
+VALUES 
+    (1, 3, 5, 40000),
+    (1, 4, 12, 55000),
+    (2, 1, 5, 65000),
+    (3, 2, 10, 55000),
+    (3, 3, 12, 45000),
+    (4, 1, 20, 65000);
+
+-- Inserciones en la tabla Compañia
+INSERT INTO Compañia (comnit, comnombre, comañofun, comreplegal)
+VALUES 
+    ('800890890-2', 'Seguros Atlantida', 1998, 'Carlos Lopez'),
+    ('899999999-1', 'Aseguradora Rojas', 1991, 'Luis Fernando Rojas'),
+    ('899999999-5', 'Seguros del estado', 2001, 'Maria Margarita Perez');
+
+-- Inserciones en la tabla TiposAutomotores
+INSERT INTO TiposAutomotores (auttipo)
+VALUES 
+    (1),
+    (2),
+    (3);
+
+-- Inserciones en la tabla Automotores
+INSERT INTO Automotores (autoplaca, automarca, autotipo, automodelo, autopasajeros, autocilindraje, autonumchasis)
+VALUES 
+    ('FLL420', 'chevrolet corsa', 1, 2003, 5, 1400, 'wywzzz167kk009d25'),
+    ('DKZ820', 'renault stepway', 1, 2008, 5, 1600, 'wywzzz157kk009d45'),
+    ('KJQ920', 'Kia sportage', 2, 2009, 7, 2000, 'wywzzz157kk009d25');
+
+-- Inserciones en la tabla Aseguramientos (corregido el formato)
+INSERT INTO Aseguramientos (asefechainicio, asefechaexpiracion, asevalorasegurado, aseestado, asecosto, aseplaca)
+VALUES 
+    ('2012-09-30', '2013-09-30', 30000000, 'Vigente', 500000, 'FLL420'),
+    ('2012-09-27', '2013-09-27', 35000000, 'Vigente', 600000, 'DKZ820'),
+    ('2011-09-28', '2012-09-28', 50000000, 'Vigente', 800000, 'KJQ920');
+
+-- Inserciones en la tabla Aseguramientos
+INSERT INTO Aseguramientos (asefechainicio, asefechaexpiracion, asevalorasegurado, aseestado, asecosto, aseplaca)
+VALUES
+    ('2012-09-30', '2013-09-30', 30000000, 'Vigente', 500000, 'FLL420'),
+    ('2012-09-27', '2013-09-27', 35000000, 'Vigente', 600000, 'DKZ820'),
+    ('2011-09-28', '2012-09-28', 50000000, 'Vigente', 800000, 'KJQ920');
+
+-- Inserciones en la tabla Incidentes
+INSERT INTO Incidentes (incifecha, inciplaca, incilugar, inciantheridos, incicanfatalidades, incicanautosinvolucrados)
+VALUES
+    ('2012-09-30', 'DKZ820', 'Bucaramanga', 0, 0, 2),
+    ('2012-09-27', 'FLL420', 'Giron', 1, 0, 1),
+    ('2011-09-28', 'FLL420', 'Bucaramanga', 1, 0, 2);
+
+
+
+-- PROCEDIMIENTOS DE ALMACENADO PARA CREAR, EDITAR Y ELIMINAR
+-- Procedimiento para crear una Compañia
+CREATE PROCEDURE CrearCompañia
+    @comnit VARCHAR(11),
+    @comnombre VARCHAR(30),
+    @comaño INT,
+    @comreplegal VARCHAR(100)
+AS
+BEGIN
+    INSERT INTO Compañia (comnit, comnombre, comañofun, comreplegal)
+    VALUES (@comnit, @comnombre, @comaño, @comreplegal);
+END;
+
+-- Procedimiento para editar una Compañia
+CREATE PROCEDURE EditarCompañia
+    @comnit VARCHAR(11),
+    @comnombre VARCHAR(30),
+    @comaño INT,
+    @comreplegal VARCHAR(100)
+AS
+BEGIN
+    UPDATE Compañia
+    SET comnombre = @comnombre, comañofun = @comaño, comreplegal = @comreplegal
+    WHERE comnit = @comnit;
+END;
+
+-- Procedimiento para eliminar una Compañia
+CREATE PROCEDURE EliminarCompañia
+    @comnit VARCHAR(11)
+AS
+BEGIN
+    DELETE FROM Compañia
+    WHERE comnit = @comnit;
+END;
+
+
+Procedimiento Almacenado para Crear un Cliente:
+
+CREATE PROCEDURE CrearCliente
+    @id_cli VARCHAR(11),
+    @nom_cli VARCHAR(30),
+    @ape_cli VARCHAR(30),
+    @dir_cli VARCHAR(100),
+    @dep_cli VARCHAR(20),
+    @mes_cum_cli VARCHAR(10)
+AS
+BEGIN
+    INSERT INTO Cliente (id_cli, nom_cli, ape_cli, dir_cli, dep_cli, mes_cum_cli)
+    VALUES (@id_cli, @nom_cli, @ape_cli, @dir_cli, @dep_cli, @mes_cum_cli);
+END;
+
+
+Procedimiento Almacenado para Editar un Cliente:
+
+CREATE PROCEDURE EditarCliente
+    @id_cli VARCHAR(11),
+    @nom_cli VARCHAR(30),
+    @ape_cli VARCHAR(30),
+    @dir_cli VARCHAR(100),
+    @dep_cli VARCHAR(20),
+    @mes_cum_cli VARCHAR(10)
+AS
+BEGIN
+    UPDATE Cliente
+    SET nom_cli = @nom_cli, ape_cli = @ape_cli, dir_cli = @dir_cli, dep_cli = @dep_cli, mes_cum_cli = @mes_cum_cli
+    WHERE id_cli = @id_cli;
+END;
+
+
+Procedimiento Almacenado para eliminar un Cliente:
+
+CREATE PROCEDURE EliminarCliente
+    @id_cli VARCHAR(11)
+AS
+BEGIN
+    DELETE FROM Cliente
+    WHERE id_cli = @id_cli;
+END;
+
+
+-- Procedimiento Almacenado para Crear un Curso
+CREATE PROCEDURE CrearCurso
+    @nom_curs VARCHAR(100),
+    @horas_cur INT,
+    @valor_cur INT
+AS
+BEGIN
+    INSERT INTO Curso (nom_curs, horas_cur, valor_cur)
+    VALUES (@nom_curs, @horas_cur, @valor_cur);
+END;
+
+-- Procedimiento Almacenado para Editar un Curso
+CREATE PROCEDURE EditarCurso
+    @cod_curs INT,
+    @nom_curs VARCHAR(100),
+    @horas_cur INT,
+    @valor_cur INT
+AS
+BEGIN
+    UPDATE Curso
+    SET nom_curs = @nom_curs, horas_cur = @horas_cur, valor_cur = @valor_cur
+    WHERE cod_curs = @cod_curs;
+END;
+
+-- Procedimiento Almacenado para Eliminar un Curso
+CREATE PROCEDURE EliminarCurso
+    @cod_curs INT
+AS
+BEGIN
+    DELETE FROM Curso
+    WHERE cod_curs = @cod_curs;
+END;
+
+
+
+
+--  50 registros para la tabla Cliente
+
+
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @nombre VARCHAR(30);
+    DECLARE @apellido VARCHAR(30);
+    DECLARE @direccion VARCHAR(100);
+    DECLARE @departamento VARCHAR(20);
+    DECLARE @mes_cumpleaños VARCHAR(10);
+
+    -- Generar datos aleatorios
+    SET @nombre = (SELECT TOP 1 FirstName FROM FirstNames ORDER BY NEWID());
+    SET @apellido = (SELECT TOP 1 LastName FROM LastNames ORDER BY NEWID());
+    SET @direccion = 'Calle ' + CAST(@counter AS VARCHAR) + ' # ' + CAST((@counter + 10) AS VARCHAR);
+    SET @departamento = (SELECT TOP 1 Department FROM Departments ORDER BY NEWID());
+    SET @mes_cumpleaños = (SELECT TOP 1 MonthName FROM Months ORDER BY NEWID());
+
+    INSERT INTO Cliente (nom_cli, ape_cli, dir_cli, dep_cli, mes_cum_cli)
+    VALUES (@nombre, @apellido, @direccion, @departamento, @mes_cumpleaños);
+
+    SET @counter = @counter + 1;
+END;
+
+
+-- Crear 50 registros aleatorios para la tabla Curso
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @nom_curs VARCHAR(100);
+    DECLARE @horas_cur INT;
+    DECLARE @valor_cur INT;
+
+    -- Generar datos aleatorios
+    SET @nom_curs = 'Curso ' + CAST(@counter AS VARCHAR);
+    SET @horas_cur = (SELECT TOP 1 Number FROM Numbers WHERE Number <= 100 ORDER BY NEWID());
+    SET @valor_cur = (SELECT TOP 1 Number FROM Numbers WHERE Number <= 5000000 ORDER BY NEWID());
+
+    INSERT INTO Curso (nom_curs, horas_cur, valor_cur)
+    VALUES (@nom_curs, @horas_cur, @valor_cur);
+
+    SET @counter = @counter + 1;
+END;
+
+
+-- Crear 50 registros aleatorios para la tabla Estudiante
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @doc_est VARCHAR(11);
+    DECLARE @nom_est VARCHAR(30);
+    DECLARE @ape_est VARCHAR(30);
+    DECLARE @edad_est INT;
+
+    -- Generar datos aleatorios
+    SET @doc_est = CAST(ABS(CHECKSUM(NEWID())) % 1000000000 + 1 AS VARCHAR(11));
+    SET @nom_est = 'Estudiante ' + CAST(@counter AS VARCHAR);
+    SET @ape_est = 'Apellido ' + CAST(@counter AS VARCHAR);
+    SET @edad_est = (SELECT TOP 1 Number FROM Numbers WHERE Number <= 30 ORDER BY NEWID());
+
+    INSERT INTO Estudiante (doc_est, nom_est, ape_est, edad_est)
+    VALUES (@doc_est, @nom_est, @ape_est, @edad_est);
+
+    SET @counter = @counter + 1;
+END;
+ 
+
+-- Crear 50 registros aleatorios para la tabla EstudiantexCurso
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @cod_cur_estcur INT;
+    DECLARE @doc_est_estcur VARCHAR(11);
+    DECLARE @fec_ini_estcur DATE;
+
+    -- Generar datos aleatorios
+    SET @cod_cur_estcur = (SELECT TOP 1 cod_curs FROM Curso ORDER BY NEWID());
+    SET @doc_est_estcur = (SELECT TOP 1 doc_est FROM Estudiante ORDER BY NEWID());
+    SET @fec_ini_estcur = DATEADD(DAY, ABS(CHECKSUM(NEWID())) % 30, '2023-01-01');
+
+    INSERT INTO EstudiantexCurso (cod_cur_estcur, doc_est_estcur, fec_ini_estcur)
+    VALUES (@cod_cur_estcur, @doc_est_estcur, @fec_ini_estcur);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla Profesor
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @doc_prof VARCHAR(11);
+    DECLARE @nom_prof VARCHAR(30);
+    DECLARE @ape_prof VARCHAR(30);
+    DECLARE @cafe_prof INT;
+    DECLARE @sal_prof INT;
+
+    -- Generar datos aleatorios
+    SET @doc_prof = CAST(FLOOR(RAND() * 1000000000) AS VARCHAR(11));
+    SET @nom_prof = (SELECT TOP 1 nom_est FROM Estudiante ORDER BY NEWID());
+    SET @ape_prof = (SELECT TOP 1 ape_est FROM Estudiante ORDER BY NEWID());
+    SET @cafe_prof = ABS(CHECKSUM(NEWID())) % 5 + 1;
+    SET @sal_prof = ABS(CHECKSUM(NEWID())) % 500000 + 500000;
+
+    INSERT INTO Profesor (doc_prof, nom_prof, ape_prof, cafe_prof, sal_prof)
+    VALUES (@doc_prof, @nom_prof, @ape_prof, @cafe_prof, @sal_prof);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla Articulo
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @tit_art VARCHAR(100);
+    DECLARE @aut_art VARCHAR(50);
+    DECLARE @edi_art VARCHAR(50);
+    DECLARE @prec_art INT;
+
+    -- Generar datos aleatorios
+    SET @tit_art = 'Título ' + CAST(@counter AS VARCHAR(5));
+    SET @aut_art = 'Autor ' + CAST(@counter AS VARCHAR(5));
+    SET @edi_art = 'Editorial ' + CAST(@counter AS VARCHAR(5));
+    SET @prec_art = ABS(CHECKSUM(NEWID())) % 200000 + 50000;
+
+    INSERT INTO Articulo (tit_art, aut_art, edi_art, prec_art)
+    VALUES (@tit_art, @aut_art, @edi_art, @prec_art);
+
+    SET @counter = @counter + 1;
+END;
+
+
+-- Crear 50 registros aleatorios para la tabla Pedido
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @id_cli_ped VARCHAR(20);
+    DECLARE @fec_ped DATE;
+    DECLARE @val_ped INT;
+
+    -- Generar datos aleatorios
+    SET @id_cli_ped = CAST(ABS(CHECKSUM(NEWID())) % 100000000 AS VARCHAR(20));
+    SET @fec_ped = DATEADD(day, ABS(CHECKSUM(NEWID())) % 365, '2012-01-01');
+    SET @val_ped = ABS(CHECKSUM(NEWID())) % 500000 + 50000;
+
+    INSERT INTO Pedido (id_cli_ped, fec_ped, val_ped)
+    VALUES (@id_cli_ped, @fec_ped, @val_ped);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla Articuloxpedido
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @id_ped_artped INT;
+    DECLARE @id_art_artped INT;
+    DECLARE @can_art_artped INT;
+    DECLARE @val_ven_art_artped INT;
+
+    -- Generar datos aleatorios
+    SET @id_ped_artped = ABS(CHECKSUM(NEWID())) % 4 + 1;  -- Valores de 1 a 4 para los pedidos existentes
+    SET @id_art_artped = ABS(CHECKSUM(NEWID())) % 4 + 1;  -- Valores de 1 a 4 para los artículos existentes
+    SET @can_art_artped = ABS(CHECKSUM(NEWID())) % 20 + 1; -- Cantidad aleatoria de 1 a 20
+    SET @val_ven_art_artped = ABS(CHECKSUM(NEWID())) % 20000 + 20000; -- Valor de venta aleatorio
+
+    INSERT INTO Articuloxpedido (id_ped_artped, id_art_artped, can_art_artped, val_ven_art_artped)
+    VALUES (@id_ped_artped, @id_art_artped, @can_art_artped, @val_ven_art_artped);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla Compañia
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @comnit NVARCHAR(15);
+    DECLARE @comnombre NVARCHAR(50);
+    DECLARE @comaño INT;
+    DECLARE @comreplegal NVARCHAR(50);
+
+    -- Generar datos aleatorios
+    SET @comnit = CAST(ABS(CHECKSUM(NEWID())) AS NVARCHAR(15));
+    SET @comnombre = 'Compañia ' + CAST(@counter AS NVARCHAR(5));
+    SET @comaño = ABS(CHECKSUM(NEWID())) % 30 + 1990; -- Años entre 1990 y 2019
+    SET @comreplegal = 'Representante ' + CAST(@counter AS NVARCHAR(5));
+
+    INSERT INTO Compañia (comnit, comnombre, comañofun, comreplegal)
+    VALUES (@comnit, @comnombre, @comaño, @comreplegal);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla TiposAutomotores
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @auttipo INT;
+
+    -- Generar datos aleatorios
+    SET @auttipo = ABS(CHECKSUM(NEWID())) % 5 + 1; -- Valores entre 1 y 5
+
+    INSERT INTO TiposAutomotores (auttipo)
+    VALUES (@auttipo);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla Automotores
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @autoplaca NVARCHAR(50);
+    DECLARE @automarca NVARCHAR(50);
+    DECLARE @autotipo INT;
+    DECLARE @automodelo INT;
+    DECLARE @autopasajeros INT;
+    DECLARE @autocilindraje INT;
+    DECLARE @autonumchasis NVARCHAR(50);
+
+    -- Generar datos aleatorios
+    SET @autoplaca = 'ABC' + CONVERT(NVARCHAR(2), @counter);
+    SET @automarca = CASE WHEN @counter % 2 = 0 THEN 'Chevrolet' ELSE 'Ford' END;
+    SET @autotipo = ABS(CHECKSUM(NEWID())) % 3 + 1; -- Valores entre 1 y 3
+    SET @automodelo = 2000 + (ABS(CHECKSUM(NEWID())) % 20); -- Años entre 2000 y 2019
+    SET @autopasajeros = ABS(CHECKSUM(NEWID())) % 8 + 1; -- Valores entre 1 y 8
+    SET @autocilindraje = ABS(CHECKSUM(NEWID())) % 2000 + 1000; -- Valores entre 1000 y 2999
+    SET @autonumchasis = 'CH' + CONVERT(NVARCHAR(2), @counter) + 'XYZ';
+
+    INSERT INTO Automotores (autoplaca, automarca, autotipo, automodelo, autopasajeros, autocilindraje, autonumchasis)
+    VALUES (@autoplaca, @automarca, @autotipo, @automodelo, @autopasajeros, @autocilindraje, @autonumchasis);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla Aseguramientos
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @asefechainicio DATE;
+    DECLARE @asefechaexpiracion DATE;
+    DECLARE @asevalorasegurado INT;
+    DECLARE @aseestado NVARCHAR(50);
+    DECLARE @asecosto INT;
+    DECLARE @aseplaca NVARCHAR(50);
+
+    -- Generar datos aleatorios
+    SET @asefechainicio = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()); -- Fecha en los últimos 365 días
+    SET @asefechaexpiracion = DATEADD(DAY, ABS(CHECKSUM(NEWID())) % 365, @asefechainicio); -- Fecha posterior a asefechainicio
+    SET @asevalorasegurado = (ABS(CHECKSUM(NEWID())) % 2000000) + 100000; -- Valores entre 100,000 y 2,000,000
+    SET @aseestado = CASE WHEN @counter % 2 = 0 THEN 'Vigente' ELSE 'Expirado' END;
+    SET @asecosto = (ABS(CHECKSUM(NEWID())) % 500000) + 100000; -- Valores entre 100,000 y 600,000
+    SET @aseplaca = 'ABC' + CONVERT(NVARCHAR(2), @counter);
+
+    INSERT INTO Aseguramientos (asefechainicio, asefechaexpiracion, asevalorasegurado, aseestado, asecosto, aseplaca)
+    VALUES (@asefechainicio, @asefechaexpiracion, @asevalorasegurado, @aseestado, @asecosto, @aseplaca);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+-- Crear 50 registros aleatorios para la tabla Incidentes
+DECLARE @counter INT;
+SET @counter = 1;
+
+WHILE @counter <= 50
+BEGIN
+    DECLARE @incifecha DATE;
+    DECLARE @inciplaca NVARCHAR(50);
+    DECLARE @incilugar NVARCHAR(255);
+    DECLARE @inciantheridos INT;
+    DECLARE @incicanfatalidades INT;
+    DECLARE @incicanautosinvolucrados INT;
+
+    -- Generar datos aleatorios
+    SET @incifecha = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()); -- Fecha en los últimos 365 días
+    SET @inciplaca = 'ABC' + CONVERT(NVARCHAR(2), @counter); -- Placas ficticias
+    SET @incilugar = 'Lugar' + CONVERT(NVARCHAR(2), @counter); -- Lugar ficticio
+    SET @inciantheridos = ABS(CHECKSUM(NEWID())) % 5; -- Número de heridos entre 0 y 4
+    SET @incicanfatalidades = ABS(CHECKSUM(NEWID())) % 2; -- 0 o 1 para indicar fatalidades
+    SET @incicanautosinvolucrados = ABS(CHECKSUM(NEWID())) % 10; -- Número de autos involucrados entre 0 y 9
+
+    INSERT INTO Incidentes (incifecha, inciplaca, incilugar, inciantheridos, incicanfatalidades, incicanautosinvolucrados)
+    VALUES (@incifecha, @inciplaca, @incilugar, @inciantheridos, @incicanfatalidades, @incicanautosinvolucrados);
+
+    SET @counter = @counter + 1;
+END;
+
+
+
+c. Crear 5 procedimientos almacenados para las siguientes consultas:
+
+
+i. Visualizar los clientes que cumplen años según un mes ingresado por parámetros:
+
+CREATE PROCEDURE ConsultarClientesPorMesCumpleaños
+    @mes_cum_cli VARCHAR(10)
+AS
+BEGIN
+    SELECT id_cli, nom_cli, ape_cli
+    FROM Cliente
+    WHERE mes_cum_cli = @mes_cum_cli;
+END;
+
+
+ii. Visualizar el nombre del cliente, la fecha y el valor según el id del cliente ingresado:
+
+CREATE PROCEDURE ConsultarDatosPedidoPorIdCliente
+    @id_cli VARCHAR(11)
+AS
+BEGIN
+    SELECT C.nom_cli, P.fec_ped, P.val_ped
+    FROM Cliente C
+    INNER JOIN Pedido P ON C.id_cli = P.id_cli_ped
+    WHERE C.id_cli = @id_cli;
+END;
+
+
+iii. Visualizar los datos de las empresas fundadas según el año ingresado:
+
+CREATE PROCEDURE ConsultarCompañiasPorAñoFundacion
+    @año_fundacion INT
+AS
+BEGIN
+    SELECT comnit, comnombre, comañofun, comreplegal
+    FROM Compañia
+    WHERE comañofun = @año_fundacion;
+END;
+
+
+iv. Visualizar los datos de la empresa según el nit ingresado:
+
+CREATE PROCEDURE ConsultarCompañiaPorNit
+    @comnit VARCHAR(11)
+AS
+BEGIN
+    SELECT comnit, comnombre, comañofun, comreplegal
+    FROM Compañia
+    WHERE comnit = @comnit;
+END;
+
+
+v. Visualizar los pedidos que se han realizado según el id de artículo ingresado:
+
+CREATE PROCEDURE ConsultarPedidosPorIdArticulo
+    @id_articulo INT
+AS
+BEGIN
+    SELECT C.nom_cli, C.dir_cli,
+
+
